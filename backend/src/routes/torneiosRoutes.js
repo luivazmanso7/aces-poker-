@@ -5,9 +5,7 @@ import express from "express";
 const router = express.Router();
 
 
-router.get('/torneios', (req, res) => {
-    res.send('Lista de torneios');
-  });
+router.post("/register", cadastrarUsuario);
 
 
 
