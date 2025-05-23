@@ -3,7 +3,8 @@ import sequelize from '../config/db.js';
 
 const Admin = sequelize.define('Admin', {
   id: {
-    type: DataTypes.CHAR(36),
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
   nome: DataTypes.STRING(100),
@@ -12,7 +13,12 @@ const Admin = sequelize.define('Admin', {
     allowNull: false,
     unique: true,
   },
-  senha_hash: DataTypes.TEXT,
+  senha_hash: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  }
+}, {
+  timestamps: false
 });
 
 export default Admin;
