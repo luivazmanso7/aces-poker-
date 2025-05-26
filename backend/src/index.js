@@ -13,7 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(router);
-app.use('/api', adminRoutes);
+app.use('/', adminRoutes);
 
 
 const PORT = process.env.PORT || 3000;
