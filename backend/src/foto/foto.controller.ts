@@ -8,9 +8,10 @@ import {
   Delete,
   UseGuards,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { FotoService } from './foto.service';
-import { CreateFotoDto, UpdateFotoDto } from './dto/foto.dto';
+import { CreateFotoDto, UpdateFotoDto, CategoriaFoto } from './dto/foto.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('fotos')
@@ -28,6 +29,47 @@ export class FotoController {
     return this.fotoService.findAll();
   }
 
+  @Get('galeria')
+  findGaleriaOrganizada() {
+    return this.fotoService.findGaleriaOrganizada();
+  }
+
+  @Get('hall-da-fama')
+  findHallDaFama() {
+    return this.fotoService.findHallDaFama();
+  }
+
+  @Get('melhores-momentos')
+  findMelhoresMomentos() {
+    return this.fotoService.findMelhoresMomentos();
+  }
+
+  @Get('temporadas')
+  findTemporadas() {
+    return this.fotoService.findTemporadas();
+  }
+
+  @Get('categoria/:categoria')
+  findByCategoria(@Param('categoria') categoria: string) {
+    // Mapear categoria para os métodos específicos
+    switch(categoria) {
+      case 'HALL_DA_FAMA':
+        return this.fotoService.findHallDaFama();
+      case 'MELHORES_MOMENTOS':
+        return this.fotoService.findMelhoresMomentos();
+      case 'TEMPORADA':
+        return this.fotoService.findTemporadas();
+      default:
+        return this.fotoService.findTemporadas();
+    }
+  }
+
+  @Get('jogador/:id_jogador')
+  async findByJogador(@Param('id_jogador', ParseIntPipe) id_jogador: number) {
+    // Por enquanto, retornar array vazio até implementarmos a funcionalidade
+    return [];
+  }
+
   @Get('torneio/:id_torneio')
   findByTorneio(@Param('id_torneio', ParseIntPipe) id_torneio: number) {
     return this.fotoService.findByTorneio(id_torneio);
@@ -35,7 +77,8 @@ export class FotoController {
 
   @Get('temporada/:id_temporada')
   findByTemporada(@Param('id_temporada', ParseIntPipe) id_temporada: number) {
-    return this.fotoService.findByTemporada(id_temporada);
+    // Por enquanto, retornar temporadas gerais até implementarmos filtro específico
+    return this.fotoService.findTemporadas();
   }
 
   @Get(':id')

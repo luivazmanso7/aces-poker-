@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,129 +8,118 @@ datasource db {
 }
 
 model Admin {
-  id          Int      @id @default(autoincrement())
-  nome        String   @db.VarChar(100)
-  email       String   @unique @db.VarChar(150)
-  senha       String   @db.Text
-  created_at  DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  nome       String   @db.VarChar(100)
+  email      String   @unique @db.VarChar(150)
+  senha      String   @db.Text
+  created_at DateTime @default(now())
 
   @@map("admins")
 }
 
 model Temporada {
-  id          Int      @id @default(autoincrement())
-  nome        String   @db.VarChar(100)
-  ano         Int
-  criada_em   DateTime @default(now())
-  
-  // Relacionamentos
-  torneios    Torneio[]
-  rankings    Ranking[]
-  fotos       Foto[]    // Fotos da temporada
+  id        Int       @id @default(autoincrement())
+  nome      String    @db.VarChar(100)
+  ano       Int
+  criada_em DateTime  @default(now())
+  fotos     Foto[]
+  rankings  Ranking[]
+  torneios  Torneio[]
 
   @@map("temporadas")
 }
 
 model Jogador {
-  id          Int      @id @default(autoincrement())
-  nome        String   @db.VarChar(100)
-  email       String?  @unique @db.VarChar(150)
-  telefone    String?  @db.VarChar(20)
-  apelido     String?  @db.VarChar(50)
-  avatar_url  String?  @db.VarChar(255)
-  bio         String?  @db.Text
-  cidade      String?  @db.VarChar(100)
+  id              Int            @id @default(autoincrement())
+  nome            String         @db.VarChar(100)
+  email           String?        @unique @db.VarChar(150)
+  telefone        String?        @db.VarChar(20)
+  apelido         String?        @db.VarChar(50)
+  avatar_url      String?        @db.VarChar(255)
+  bio             String?        @db.Text
+  cidade          String?        @db.VarChar(100)
   data_nascimento DateTime?
-  ativo       Boolean  @default(true)
-  criado_em   DateTime @default(now())
-  
-  // Estatísticas calculadas
-  total_torneios   Int @default(0)  // Total de torneios participados
-  total_pontos     Int @default(0)  // Total de pontos acumulados
-  melhor_posicao   Int?             // Melhor posição já alcançada
-  vitorias         Int @default(0)  // Número de vitórias (1º lugar)
-  
-  // Relacionamentos
-  participacoes Participacao[]
-  rankings    Ranking[]
-  fotos       Foto[]    // Fotos do hall da fama (campeões)
+  ativo           Boolean        @default(true)
+  criado_em       DateTime       @default(now())
+  total_torneios  Int            @default(0)
+  total_pontos    Int            @default(0)
+  melhor_posicao  Int?
+  vitorias        Int            @default(0)
+  fotos           Foto[]
+  participacoes   Participacao[]
+  rankings        Ranking[]
 
   @@map("jogadores")
 }
 
 model Torneio {
-  id            Int      @id @default(autoincrement())
+  id            Int            @id @default(autoincrement())
   id_temporada  Int
-  nome          String   @db.VarChar(100)
+  nome          String         @db.VarChar(100)
   data_hora     DateTime
-  local         String   @db.VarChar(200)
-  observacoes   String?  @db.Text
-  ativo         Boolean  @default(true)
-  
-  // Relacionamentos
-  temporada     Temporada @relation(fields: [id_temporada], references: [id], onDelete: Cascade)
-  participacoes Participacao[]
+  local         String         @db.VarChar(200)
+  observacoes   String?        @db.Text
+  ativo         Boolean        @default(true)
   fotos         Foto[]
+  participacoes Participacao[]
+  temporada     Temporada      @relation(fields: [id_temporada], references: [id], onDelete: Cascade)
 
+  @@index([id_temporada], map: "torneios_id_temporada_fkey")
   @@map("torneios")
 }
 
-// Nova tabela para registrar pontuações por torneio
 model Participacao {
-  id           Int      @id @default(autoincrement())
-  id_torneio   Int
-  id_jogador   Int
-  posicao      Int      // Posição final no torneio (1º, 2º, 3º, etc.)
-  pontuacao    Int      // Pontos ganhos neste torneio
-  criado_em    DateTime @default(now())
-  
-  // Relacionamentos
-  torneio      Torneio  @relation(fields: [id_torneio], references: [id], onDelete: Cascade)
-  jogador      Jogador  @relation(fields: [id_jogador], references: [id], onDelete: Cascade)
+  id         Int      @id @default(autoincrement())
+  id_torneio Int
+  id_jogador Int
+  posicao    Int
+  pontuacao  Int
+  criado_em  DateTime @default(now())
+  jogador    Jogador  @relation(fields: [id_jogador], references: [id], onDelete: Cascade)
+  torneio    Torneio  @relation(fields: [id_torneio], references: [id], onDelete: Cascade)
 
-  // Índice único para evitar duplicatas (um jogador por torneio)
   @@unique([id_torneio, id_jogador])
+  @@index([id_jogador], map: "participacoes_id_jogador_fkey")
   @@map("participacoes")
 }
 
 model Ranking {
-  id            Int      @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   posicao       Int
-  pontuacao     Int      // Soma total de pontos na temporada
-  atualizado_em DateTime @default(now())
+  pontuacao     Int
+  atualizado_em DateTime  @default(now())
   id_jogador    Int
   id_temporada  Int
-  
-  // Relacionamentos
   jogador       Jogador   @relation(fields: [id_jogador], references: [id], onDelete: Cascade)
   temporada     Temporada @relation(fields: [id_temporada], references: [id], onDelete: Cascade)
 
-  // Índice único para evitar duplicatas
   @@unique([id_jogador, id_temporada])
+  @@index([id_temporada], map: "ranking_id_temporada_fkey")
   @@map("ranking")
+}
+
+model Foto {
+  id           Int           @id @default(autoincrement())
+  id_torneio   Int?
+  id_temporada Int?
+  id_jogador   Int?
+  imagem_url   String        @db.VarChar(255)
+  legenda      String?       @db.VarChar(255)
+  data         DateTime      @default(now())
+  album        String        @db.VarChar(100)
+  categoria    CategoriaFoto @default(TEMPORADA)
+  jogador      Jogador?      @relation(fields: [id_jogador], references: [id], onDelete: Cascade)
+  temporada    Temporada?    @relation(fields: [id_temporada], references: [id], onDelete: Cascade)
+  torneio      Torneio?      @relation(fields: [id_torneio], references: [id], onDelete: Cascade)
+
+  @@index([id_jogador], map: "fotos_id_jogador_fkey")
+  @@index([id_temporada], map: "fotos_id_temporada_fkey")
+  @@index([id_torneio], map: "fotos_id_torneio_fkey")
+  @@map("fotos")
 }
 
 enum CategoriaFoto {
   TEMPORADA
   HALL_DA_FAMA
   MELHORES_MOMENTOS
-}
-
-model Foto {
-  id           Int      @id @default(autoincrement())
-  id_torneio   Int?     // Agora opcional para fotos não vinculadas a torneios
-  id_temporada Int?     // Para fotos de temporada sem torneio específico
-  id_jogador   Int?     // Para fotos do hall da fama (campeões)
-  imagem_url   String   @db.VarChar(255)
-  legenda      String?  @db.VarChar(255)
-  data         DateTime @default(now())
-  album        String   @db.VarChar(100)
-  categoria    CategoriaFoto @default(TEMPORADA)
-  
-  // Relacionamentos
-  torneio      Torneio?  @relation(fields: [id_torneio], references: [id], onDelete: Cascade)
-  temporada    Temporada? @relation(fields: [id_temporada], references: [id], onDelete: Cascade)
-  jogador      Jogador?  @relation(fields: [id_jogador], references: [id], onDelete: Cascade)
-
-  @@map("fotos")
 }

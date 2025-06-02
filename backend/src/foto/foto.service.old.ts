@@ -34,52 +34,6 @@ export class FotoService {
     });
   }
 
-  async findByTorneio(id_torneio: number) {
-    return this.prisma.foto.findMany({
-      where: {
-        id_torneio,
-      },
-      include: {
-        torneio: true,
-      },
-      orderBy: {
-        data: 'desc',
-      },
-    });
-  }
-
-  async findHallDaFama() {
-    return this.prisma.$queryRaw`
-      SELECT * FROM fotos WHERE categoria = 'HALL_DA_FAMA' ORDER BY data DESC
-    `;
-  }
-
-  async findMelhoresMomentos() {
-    return this.prisma.$queryRaw`
-      SELECT * FROM fotos WHERE categoria = 'MELHORES_MOMENTOS' ORDER BY data DESC
-    `;
-  }
-
-  async findTemporadas() {
-    return this.prisma.$queryRaw`
-      SELECT * FROM fotos WHERE categoria = 'TEMPORADA' ORDER BY data DESC
-    `;
-  }
-
-  async findGaleriaOrganizada() {
-    const [temporadas, hallDaFama, melhoresMomentos] = await Promise.all([
-      this.findTemporadas(),
-      this.findHallDaFama(),
-      this.findMelhoresMomentos(),
-    ]);
-
-    return {
-      temporadas,
-      hall_da_fama: hallDaFama,
-      melhores_momentos: melhoresMomentos,
-    };
-  }
-
   async findOne(id: number) {
     return this.prisma.foto.findUnique({
       where: { id },
@@ -100,6 +54,90 @@ export class FotoService {
     return this.prisma.foto.delete({
       where: { id },
     });
+  }
+
+  async findByTorneio(id_torneio: number) {
+    return this.prisma.foto.findMany({
+      where: {
+        id_torneio,
+      },
+      include: {
+        torneio: true,
+      },
+      orderBy: {
+        data: 'desc',
+      },
+    });
+  }
+
+  async findByCategoria(categoria: CategoriaFoto) {
+    return this.prisma.foto.findMany({
+      where: {
+        categoria,
+      },
+      include: {
+        torneio: true,
+      },
+      orderBy: {
+        data: 'desc',
+      },
+    });
+  }
+
+  async findHallDaFama() {
+    return this.prisma.foto.findMany({
+      where: {
+        categoria: 'HALL_DA_FAMA',
+      },
+      include: {
+        torneio: true,
+      },
+      orderBy: {
+        data: 'desc',
+      },
+    });
+  }
+
+  async findMelhoresMomentos() {
+    return this.prisma.foto.findMany({
+      where: {
+        categoria: 'MELHORES_MOMENTOS',
+      },
+      include: {
+        torneio: true,
+      },
+      orderBy: {
+        data: 'desc',
+      },
+    });
+  }
+
+  async findTemporadas() {
+    return this.prisma.foto.findMany({
+      where: {
+        categoria: 'TEMPORADA',
+      },
+      include: {
+        torneio: true,
+      },
+      orderBy: {
+        data: 'desc',
+      },
+    });
+  }
+
+  async findGaleriaOrganizada() {
+    const [temporadas, hallDaFama, melhoresMomentos] = await Promise.all([
+      this.findTemporadas(),
+      this.findHallDaFama(),
+      this.findMelhoresMomentos(),
+    ]);
+
+    return {
+      temporadas,
+      hall_da_fama: hallDaFama,
+      melhores_momentos: melhoresMomentos,
+    };
   }
 
   async removeByTorneio(id_torneio: number) {

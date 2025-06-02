@@ -1,8 +1,23 @@
-import { IsString, IsOptional, IsUrl, IsInt } from 'class-validator';
+import { IsString, IsOptional, IsUrl, IsInt, IsEnum } from 'class-validator';
+
+export enum CategoriaFoto {
+  TEMPORADA = 'TEMPORADA',
+  HALL_DA_FAMA = 'HALL_DA_FAMA',
+  MELHORES_MOMENTOS = 'MELHORES_MOMENTOS',
+}
 
 export class CreateFotoDto {
+  @IsOptional()
   @IsInt()
-  id_torneio: number;
+  id_torneio?: number;
+
+  @IsOptional()
+  @IsInt()
+  id_temporada?: number;
+
+  @IsOptional()
+  @IsInt()
+  id_jogador?: number;
 
   @IsUrl()
   imagem_url: string;
@@ -13,12 +28,23 @@ export class CreateFotoDto {
 
   @IsString()
   album: string;
+
+  @IsEnum(CategoriaFoto)
+  categoria: CategoriaFoto;
 }
 
 export class UpdateFotoDto {
   @IsOptional()
   @IsInt()
   id_torneio?: number;
+
+  @IsOptional()
+  @IsInt()
+  id_temporada?: number;
+
+  @IsOptional()
+  @IsInt()
+  id_jogador?: number;
 
   @IsOptional()
   @IsUrl()
@@ -31,4 +57,8 @@ export class UpdateFotoDto {
   @IsOptional()
   @IsString()
   album?: string;
+
+  @IsOptional()
+  @IsEnum(CategoriaFoto)
+  categoria?: CategoriaFoto;
 }
