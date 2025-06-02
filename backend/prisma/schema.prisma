@@ -29,6 +29,7 @@ model Temporada {
   // Relacionamentos
   torneios    Torneio[]
   rankings    Ranking[]
+  fotos       Foto[]    // Fotos da temporada
 
   @@map("temporadas")
 }
@@ -36,10 +37,26 @@ model Temporada {
 model Jogador {
   id          Int      @id @default(autoincrement())
   nome        String   @db.VarChar(100)
+  email       String?  @unique @db.VarChar(150)
+  telefone    String?  @db.VarChar(20)
+  apelido     String?  @db.VarChar(50)
+  avatar_url  String?  @db.VarChar(255)
+  bio         String?  @db.Text
+  cidade      String?  @db.VarChar(100)
+  data_nascimento DateTime?
+  ativo       Boolean  @default(true)
+  criado_em   DateTime @default(now())
+  
+  // Estatísticas calculadas
+  total_torneios   Int @default(0)  // Total de torneios participados
+  total_pontos     Int @default(0)  // Total de pontos acumulados
+  melhor_posicao   Int?             // Melhor posição já alcançada
+  vitorias         Int @default(0)  // Número de vitórias (1º lugar)
   
   // Relacionamentos
   participacoes Participacao[]
   rankings    Ranking[]
+  fotos       Foto[]    // Fotos do hall da fama (campeões)
 
   @@map("jogadores")
 }
@@ -96,16 +113,27 @@ model Ranking {
   @@map("ranking")
 }
 
+enum CategoriaFoto {
+  TEMPORADA
+  HALL_DA_FAMA
+  MELHORES_MOMENTOS
+}
+
 model Foto {
   id           Int      @id @default(autoincrement())
-  id_torneio   Int
+  id_torneio   Int?     // Agora opcional para fotos não vinculadas a torneios
+  id_temporada Int?     // Para fotos de temporada sem torneio específico
+  id_jogador   Int?     // Para fotos do hall da fama (campeões)
   imagem_url   String   @db.VarChar(255)
   legenda      String?  @db.VarChar(255)
   data         DateTime @default(now())
   album        String   @db.VarChar(100)
+  categoria    CategoriaFoto @default(TEMPORADA)
   
   // Relacionamentos
-  torneio      Torneio  @relation(fields: [id_torneio], references: [id], onDelete: Cascade)
+  torneio      Torneio?  @relation(fields: [id_torneio], references: [id], onDelete: Cascade)
+  temporada    Temporada? @relation(fields: [id_temporada], references: [id], onDelete: Cascade)
+  jogador      Jogador?  @relation(fields: [id_jogador], references: [id], onDelete: Cascade)
 
   @@map("fotos")
 }

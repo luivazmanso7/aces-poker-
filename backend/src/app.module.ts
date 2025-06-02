@@ -5,6 +5,10 @@ import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
+import { TemporadaModule } from './temporada/temporada.module';
+import { JogadorModule } from './jogador/jogador.module';
+import { TorneioModule } from './torneio/torneio.module';
+import { FotoModule } from './foto/foto.module';
 
 @Module({
   imports: [
@@ -13,7 +17,11 @@ import { AuthModule } from './auth/auth.module';
     }),
     PrismaModule, 
     AdminModule, 
-    AuthModule
+    AuthModule,
+    TemporadaModule,
+    JogadorModule,
+    TorneioModule,
+    FotoModule
   ],
   controllers: [AppController],
   providers: [AppService],
