@@ -19,3 +19,93 @@ model Admin {
 
   @@map("admins")
 }
+
+model Temporada {
+  id          Int      @id @default(autoincrement())
+  nome        String   @db.VarChar(100)
+  ano         Int
+  criada_em   DateTime @default(now())
+  
+  // Relacionamentos
+  torneios    Torneio[]
+  rankings    Ranking[]
+
+  @@map("temporadas")
+}
+
+model Jogador {
+  id          Int      @id @default(autoincrement())
+  nome        String   @db.VarChar(100)
+  
+  // Relacionamentos
+  participacoes Participacao[]
+  rankings    Ranking[]
+
+  @@map("jogadores")
+}
+
+model Torneio {
+  id            Int      @id @default(autoincrement())
+  id_temporada  Int
+  nome          String   @db.VarChar(100)
+  data_hora     DateTime
+  local         String   @db.VarChar(200)
+  observacoes   String?  @db.Text
+  ativo         Boolean  @default(true)
+  
+  // Relacionamentos
+  temporada     Temporada @relation(fields: [id_temporada], references: [id], onDelete: Cascade)
+  participacoes Participacao[]
+  fotos         Foto[]
+
+  @@map("torneios")
+}
+
+// Nova tabela para registrar pontuações por torneio
+model Participacao {
+  id           Int      @id @default(autoincrement())
+  id_torneio   Int
+  id_jogador   Int
+  posicao      Int      // Posição final no torneio (1º, 2º, 3º, etc.)
+  pontuacao    Int      // Pontos ganhos neste torneio
+  criado_em    DateTime @default(now())
+  
+  // Relacionamentos
+  torneio      Torneio  @relation(fields: [id_torneio], references: [id], onDelete: Cascade)
+  jogador      Jogador  @relation(fields: [id_jogador], references: [id], onDelete: Cascade)
+
+  // Índice único para evitar duplicatas (um jogador por torneio)
+  @@unique([id_torneio, id_jogador])
+  @@map("participacoes")
+}
+
+model Ranking {
+  id            Int      @id @default(autoincrement())
+  posicao       Int
+  pontuacao     Int      // Soma total de pontos na temporada
+  atualizado_em DateTime @default(now())
+  id_jogador    Int
+  id_temporada  Int
+  
+  // Relacionamentos
+  jogador       Jogador   @relation(fields: [id_jogador], references: [id], onDelete: Cascade)
+  temporada     Temporada @relation(fields: [id_temporada], references: [id], onDelete: Cascade)
+
+  // Índice único para evitar duplicatas
+  @@unique([id_jogador, id_temporada])
+  @@map("ranking")
+}
+
+model Foto {
+  id           Int      @id @default(autoincrement())
+  id_torneio   Int
+  imagem_url   String   @db.VarChar(255)
+  legenda      String?  @db.VarChar(255)
+  data         DateTime @default(now())
+  album        String   @db.VarChar(100)
+  
+  // Relacionamentos
+  torneio      Torneio  @relation(fields: [id_torneio], references: [id], onDelete: Cascade)
+
+  @@map("fotos")
+}
