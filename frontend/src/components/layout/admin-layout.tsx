@@ -102,13 +102,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           gap: 2,
           borderBottom: 1,
           borderColor: 'divider',
-          background: 'linear-gradient(135deg, #7c2d12 0%, #a16207 50%, #f59e0b 100%)',
+          backgroundColor: 'background.paper',
         }}
       >
         <Box
           sx={{
             fontSize: '2rem',
-            filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
+            filter: 'grayscale(0.2)',
           }}
         >
           🃏
@@ -118,8 +118,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             variant="h6"
             sx={{
               fontWeight: 700,
-              color: 'white',
-              textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+              color: 'text.primary',
             }}
           >
             ACES POKER
@@ -128,9 +127,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             label="ADMIN"
             size="small"
             sx={{
-              backgroundColor: 'rgba(255,255,255,0.2)',
-              color: 'white',
-              fontWeight: 600,
+              backgroundColor: 'rgba(0,0,0,0.08)',
+              color: 'text.secondary',
+              fontWeight: 500,
               fontSize: '0.7rem',
               height: 20,
             }}
@@ -159,21 +158,21 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     borderRadius: 2,
                     minHeight: 48,
                     '&.Mui-selected': {
-                      backgroundColor: 'rgba(245, 158, 11, 0.15)',
+                      backgroundColor: 'rgba(0, 0, 0, 0.04)',
                       borderLeft: '3px solid',
-                      borderLeftColor: theme.customColors.accent.main,
+                      borderLeftColor: 'text.primary',
                       '&:hover': {
-                        backgroundColor: 'rgba(245, 158, 11, 0.25)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.08)',
                       },
                     },
                     '&:hover': {
-                      backgroundColor: 'rgba(245, 158, 11, 0.08)',
+                      backgroundColor: 'rgba(0, 0, 0, 0.02)',
                     },
                   }}
                 >
                   <ListItemIcon
                     sx={{
-                      color: isActive ? theme.customColors.accent.main : 'text.secondary',
+                      color: isActive ? 'text.primary' : 'text.secondary',
                       minWidth: 40,
                     }}
                   >
@@ -184,7 +183,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     sx={{
                       '& .MuiListItemText-primary': {
                         fontWeight: isActive ? 600 : 400,
-                        color: isActive ? theme.customColors.accent.main : 'text.primary',
+                        color: isActive ? 'text.primary' : 'text.primary',
                       },
                     }}
                   />
@@ -201,7 +200,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           p: 2,
           borderTop: 1,
           borderColor: 'divider',
-          background: 'rgba(245, 158, 11, 0.05)',
+          backgroundColor: 'background.default',
         }}
       >
         <Box
@@ -213,14 +212,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             borderRadius: 2,
             backgroundColor: 'background.paper',
             border: 1,
-            borderColor: 'rgba(245, 158, 11, 0.2)',
+            borderColor: 'divider',
           }}
         >
           <Avatar
             sx={{
               width: 36,
               height: 36,
-              background: 'linear-gradient(135deg, #7c2d12 0%, #f59e0b 100%)',
+              backgroundColor: 'action.selected',
+              color: 'text.primary',
               fontSize: '0.9rem',
               fontWeight: 600,
             }}
@@ -400,10 +400,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           width: { lg: `calc(100% - ${DRAWER_WIDTH}px)` },
           minHeight: '100vh',
           backgroundColor: 'background.default',
-          backgroundImage: `
-            radial-gradient(circle at 25% 25%, rgba(124, 45, 18, 0.02) 0%, transparent 50%),
-            radial-gradient(circle at 75% 75%, rgba(245, 158, 11, 0.02) 0%, transparent 50%)
-          `,
         }}
       >
         <Toolbar />

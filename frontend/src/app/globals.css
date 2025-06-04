@@ -89,33 +89,6 @@
   --glass-shadow: rgba(0, 0, 0, 0.3);
 }
 
-@theme inline {
-  --color-primary: var(--primary);
-  --color-primary-light: var(--primary-light);
-  --color-primary-dark: var(--primary-dark);
-  --color-secondary: var(--secondary);
-  --color-secondary-light: var(--secondary-light);
-  --color-secondary-dark: var(--secondary-dark);
-  --color-accent: var(--accent);
-  --color-accent-light: var(--accent-light);
-  --color-accent-dark: var(--accent-dark);
-  --color-background: var(--background);
-  --color-background-light: var(--background-light);
-  --color-surface: var(--surface);
-  --color-surface-light: var(--surface-light);
-  --color-surface-dark: var(--surface-dark);
-  --color-border: var(--border);
-  --color-border-light: var(--border-light);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-muted: var(--text-muted);
-  --color-success: var(--success);
-  --color-warning: var(--warning);
-  --color-danger: var(--danger);
-  --color-info: var(--info);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
 body {
   background: var(--background);
@@ -283,23 +256,114 @@ body {
 }
 
 /* Scrollbar Styling */
+/* Custom Scrollbar Styles - Dark Theme */
+/* Webkit-based browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--surface-dark);
+  background: #0f0f0f; /* background.default */
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  background: linear-gradient(135deg, #333333 0%, #404040 100%); /* border colors */
   border-radius: 4px;
+  border: 1px solid #1e1e1e; /* background.paper */
+  transition: all 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent-light) 100%);
+  background: linear-gradient(135deg, #4b5563 0%, #374151 100%); /* secondary colors */
+  border-color: #333;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+}
+
+::-webkit-scrollbar-corner {
+  background: #0f0f0f; /* background.default */
+}
+
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #333333 #0f0f0f; /* thumb track */
+}
+
+/* Enhanced scrollbar for Material-UI components */
+.MuiDrawer-paper::-webkit-scrollbar,
+.MuiMenu-paper::-webkit-scrollbar,
+.MuiList-root::-webkit-scrollbar {
+  width: 6px;
+}
+
+.MuiDrawer-paper::-webkit-scrollbar-track,
+.MuiMenu-paper::-webkit-scrollbar-track,
+.MuiList-root::-webkit-scrollbar-track {
+  background: rgba(30, 30, 30, 0.3); /* background.paper with opacity */
+  border-radius: 3px;
+}
+
+.MuiDrawer-paper::-webkit-scrollbar-thumb,
+.MuiMenu-paper::-webkit-scrollbar-thumb,
+.MuiList-root::-webkit-scrollbar-thumb {
+  background: rgba(51, 51, 51, 0.6); /* border.main with opacity */
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+
+.MuiDrawer-paper::-webkit-scrollbar-thumb:hover,
+.MuiMenu-paper::-webkit-scrollbar-thumb:hover,
+.MuiList-root::-webkit-scrollbar-thumb:hover {
+  background: rgba(75, 85, 99, 0.8); /* secondary.600 with opacity */
+}
+
+/* Scrollbar for main content areas */
+main::-webkit-scrollbar,
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+main::-webkit-scrollbar-track,
+.main-content::-webkit-scrollbar-track {
+  background: rgba(15, 15, 15, 0.5); /* background.default with opacity */
+  border-radius: 4px;
+}
+
+main::-webkit-scrollbar-thumb,
+.main-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, rgba(51, 51, 51, 0.4) 0%, rgba(64, 64, 64, 0.6) 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(30, 30, 30, 0.3);
+}
+
+main::-webkit-scrollbar-thumb:hover,
+.main-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, rgba(51, 51, 51, 0.6) 0%, rgba(64, 64, 64, 0.8) 100%);
+}
+
+/* Dark mode specific scrollbars */
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-track {
+    background: #0f0f0f; /* background.default */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #333333 0%, #404040 100%);
+    border-color: #1e1e1e;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+  }
+  
+  html {
+    scrollbar-color: #333333 #0f0f0f;
+  }
 }
 
 /* Animation */
