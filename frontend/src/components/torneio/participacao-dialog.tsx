@@ -205,9 +205,9 @@ export default function ParticipacaoDialog({
       <DialogTitle>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Box>
-            <Typography variant="h5" component="h2" fontWeight="bold">
+            <Box component="span" sx={{ fontWeight: 'bold', fontSize: '1.25rem', display: 'block' }}>
               Participações - {torneio.nome}
-            </Typography>
+            </Box>
             <Typography variant="body2" color="text.secondary">
               {torneioApi.formatDateTime(torneio.data_hora)} • {torneio.local}
             </Typography>

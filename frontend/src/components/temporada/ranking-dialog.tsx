@@ -76,9 +76,9 @@ export default function RankingDialog({ open, onClose, temporada, ranking }: Ran
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <TrophyIcon color="primary" />
           <div>
-            <Typography variant="h6" component="div">
+            <Box component="span" sx={{ fontWeight: 'medium', fontSize: '1.125rem', display: 'block' }}>
               Ranking - {temporada.nome}
-            </Typography>
+            </Box>
             <Typography variant="body2" color="text.secondary">
               {temporada.ano} • {ranking.length} jogador{ranking.length !== 1 ? 'es' : ''}
             </Typography>

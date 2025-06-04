@@ -134,7 +134,7 @@ export default function TorneioDialog({
       return;
     }
 
-    if (!formData.id_temporada) {
+    if (!isEditing && !formData.id_temporada) {
       setError('Temporada é obrigatória');
       return;
     }
@@ -147,22 +147,27 @@ export default function TorneioDialog({
     setLoading(true);
 
     try {
-      const submitData = {
-        ...formData,
-        nome: formData.nome.trim(),
-        local: formData.local.trim(),
-        observacoes: formData.observacoes.trim() || undefined,
-        data_hora: new Date(formData.data_hora).toISOString(),
-      };
-
-        if (isEditing && torneio) {
-            await onSubmit({
-            ...submitData,
-            id: torneio.id,
-            } as UpdateTorneioDto);
-        } else {
-            await onSubmit(submitData as CreateTorneioDto);
-        }
+      if (isEditing && torneio) {
+        // Para edição, não enviar id_temporada nem id
+        const updateData = {
+          nome: formData.nome.trim(),
+          local: formData.local.trim(),
+          observacoes: formData.observacoes.trim() || undefined,
+          data_hora: new Date(formData.data_hora).toISOString(),
+          ativo: formData.ativo,
+        };
+        await onSubmit(updateData as UpdateTorneioDto);
+      } else {
+        // Para criação, incluir id_temporada
+        const createData = {
+          ...formData,
+          nome: formData.nome.trim(),
+          local: formData.local.trim(),
+          observacoes: formData.observacoes.trim() || undefined,
+          data_hora: new Date(formData.data_hora).toISOString(),
+        };
+        await onSubmit(createData as CreateTorneioDto);
+      }
 
       onClose();
     } catch (err: unknown) {
@@ -210,16 +215,18 @@ export default function TorneioDialog({
         sx: { borderRadius: 2 }
       }}
     >
-      <DialogTitle>
-        <Typography variant="h5" component="h2" fontWeight="bold">
-          {isEditing ? 'Editar Torneio' : 'Novo Torneio'}
-        </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-          {isEditing 
-            ? 'Atualize as informações do torneio' 
-            : 'Preencha os dados para criar um novo torneio'
-          }
-        </Typography>
+      <DialogTitle sx={{ pb: 1 }}>
+        <Box>
+          <Box component="span" sx={{ fontWeight: 'bold', fontSize: '1.25rem' }}>
+            {isEditing ? 'Editar Torneio' : 'Novo Torneio'}
+          </Box>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, display: 'block' }}>
+            {isEditing 
+              ? 'Atualize as informações do torneio' 
+              : 'Preencha os dados para criar um novo torneio'
+            }
+          </Typography>
+        </Box>
       </DialogTitle>
 
       <form onSubmit={handleSubmit}>
