@@ -23,6 +23,8 @@ import {
   EmojiEvents as TrophyIcon,
   Visibility as VisibilityIcon,
   VisibilityOff as VisibilityOffIcon,
+  PersonAdd as PersonAddIcon,
+  Assignment as AssignmentIcon,
 } from '@mui/icons-material';
 import { useState } from 'react';
 import { Torneio } from '@/types/torneio';
@@ -34,6 +36,8 @@ interface TorneioCardProps {
   onDelete: (id: number) => void;
   onViewParticipacoes: (torneio: Torneio) => void;
   onManageParticipacoes: (torneio: Torneio) => void;
+  onAddJogadores?: (torneio: Torneio) => void;
+  onRegistrarResultados?: (torneio: Torneio) => void;
 }
 
 export default function TorneioCard({
@@ -42,6 +46,8 @@ export default function TorneioCard({
   onDelete,
   onViewParticipacoes,
   onManageParticipacoes,
+  onAddJogadores,
+  onRegistrarResultados,
 }: TorneioCardProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
@@ -76,6 +82,20 @@ export default function TorneioCard({
 
   const handleManageParticipacoes = () => {
     onManageParticipacoes(torneio);
+    handleMenuClose();
+  };
+
+  const handleAddJogadores = () => {
+    if (onAddJogadores) {
+      onAddJogadores(torneio);
+    }
+    handleMenuClose();
+  };
+
+  const handleRegistrarResultados = () => {
+    if (onRegistrarResultados) {
+      onRegistrarResultados(torneio);
+    }
     handleMenuClose();
   };
 
@@ -189,24 +209,56 @@ export default function TorneioCard({
       <Divider />
 
       {/* Actions */}
-      <CardActions sx={{ px: 2, py: 1.5, justifyContent: 'space-between' }}>
-        <Button
-          size="small"
-          startIcon={<PeopleIcon />}
-          onClick={handleViewParticipacoes}
-          color="primary"
-        >
-          Ver Participações
-        </Button>
+      <CardActions sx={{ px: 2, py: 1.5, flexDirection: 'column', gap: 1 }}>
+        {/* Ações Rápidas */}
+        <Box sx={{ display: 'flex', gap: 1, width: '100%' }}>
+          {onAddJogadores && (
+            <Button
+              size="small"
+              startIcon={<PersonAddIcon />}
+              onClick={handleAddJogadores}
+              variant="outlined"
+              color="primary"
+              sx={{ flex: 1 }}
+            >
+              Adicionar
+            </Button>
+          )}
+          
+          {onRegistrarResultados && participantesCount > 0 && (
+            <Button
+              size="small"
+              startIcon={<AssignmentIcon />}
+              onClick={handleRegistrarResultados}
+              variant="outlined"
+              color="secondary"
+              sx={{ flex: 1 }}
+            >
+              Resultados
+            </Button>
+          )}
+        </Box>
 
-        <Button
-          size="small"
-          variant="outlined"
-          onClick={handleManageParticipacoes}
-          disabled={isPast && participantesCount === 0}
-        >
-          Gerenciar
-        </Button>
+        {/* Ações Principais */}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+          <Button
+            size="small"
+            startIcon={<PeopleIcon />}
+            onClick={handleViewParticipacoes}
+            color="primary"
+          >
+            Ver Participações
+          </Button>
+
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={handleManageParticipacoes}
+            disabled={isPast && participantesCount === 0}
+          >
+            Gerenciar
+          </Button>
+        </Box>
       </CardActions>
 
       {/* Menu de Ações */}

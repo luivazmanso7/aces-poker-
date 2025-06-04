@@ -175,10 +175,6 @@ export default function DashboardPage() {
                     background: 'rgba(34, 197, 94, 0.2)',
                     color: '#22c55e',
                     border: '1px solid rgba(34, 197, 94, 0.3)',
-                    cursor: 'default',
-                    '&:hover': {
-                      background: 'rgba(34, 197, 94, 0.2)',
-                    },
                   }}
                 />
               </Box>
@@ -193,10 +189,6 @@ export default function DashboardPage() {
                     background: 'rgba(34, 197, 94, 0.2)',
                     color: '#22c55e',
                     border: '1px solid rgba(34, 197, 94, 0.3)',
-                    cursor: 'default',
-                    '&:hover': {
-                      background: 'rgba(34, 197, 94, 0.2)',
-                    },
                   }}
                 />
               </Box>
@@ -363,8 +355,6 @@ export default function DashboardPage() {
             }}
           >
             Sistema ACES POKER - Informações
-
-            Desenvolvido por Lui manso
           </Typography>
 
           <Box
@@ -404,6 +394,28 @@ export default function DashboardPage() {
               <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
                 03 de Junho, 2025
               </Typography>
+            </Box>
+
+            <Box>
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  color: '#f59e0b',
+                  fontWeight: 600,
+                  mb: 1,
+                }}
+              >
+                Status
+              </Typography>
+              <Chip
+                label="Operacional"
+                size="small"
+                sx={{
+                  background: 'rgba(34, 197, 94, 0.2)',
+                  color: '#22c55e',
+                  border: '1px solid rgba(34, 197, 94, 0.3)',
+                }}
+              />
             </Box>
           </Box>
         </CardContent>

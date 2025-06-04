@@ -75,6 +75,19 @@ export interface UpdateParticipacaoDto {
   pontuacao?: number;
 }
 
+// Interface para gerenciar participações em lote
+export interface ParticipacaoLote {
+  id_jogador: number;
+  posicao: number;
+  pontuacao: number;
+  jogador?: {
+    id: number;
+    nome: string;
+    apelido?: string;
+    avatar_url?: string;
+  };
+}
+
 // Tipos para filtros e busca
 export interface TorneioFilters {
   temporadaId?: number;

@@ -33,7 +33,7 @@ import { torneioApi } from '@/services/torneio.service';
 import { temporadaApi } from '@/services/temporada.service';
 import TorneioCard from '@/components/torneio/torneio-card';
 import TorneioDialog from '@/components/torneio/torneio-dialog-new';
-import ParticipacaoDialog from '@/components/torneio/participacao-dialog';
+import GestaoParticipacaoDialog from '@/components/torneio/gestao-participacao-dialog';
 
 type SnackbarSeverity = 'success' | 'error' | 'warning' | 'info';
 
@@ -179,6 +179,20 @@ export default function TorneiosPage() {
   };
 
   const handleManageParticipacoes = (torneio: Torneio) => {
+    setParticipacaoDialog({
+      open: true,
+      torneio,
+    });
+  };
+
+  const handleAddJogadores = (torneio: Torneio) => {
+    setParticipacaoDialog({
+      open: true,
+      torneio,
+    });
+  };
+
+  const handleRegistrarResultados = (torneio: Torneio) => {
     setParticipacaoDialog({
       open: true,
       torneio,
@@ -401,6 +415,8 @@ export default function TorneiosPage() {
                   onDelete={handleDeleteTorneio}
                   onViewParticipacoes={handleViewParticipacoes}
                   onManageParticipacoes={handleManageParticipacoes}
+                  onAddJogadores={handleAddJogadores}
+                  onRegistrarResultados={handleRegistrarResultados}
                 />
               </Grid>
             ))}
@@ -437,7 +453,7 @@ export default function TorneiosPage() {
         isEditing
       />
 
-      <ParticipacaoDialog
+      <GestaoParticipacaoDialog
         open={participacaoDialog.open}
         onClose={() => setParticipacaoDialog({ open: false, torneio: null })}
         torneio={participacaoDialog.torneio}

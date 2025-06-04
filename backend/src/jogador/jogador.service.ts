@@ -7,8 +7,17 @@ export class JogadorService {
   constructor(private prisma: PrismaService) {}
 
   async create(createJogadorDto: CreateJogadorDto) {
+    const data = {
+      ...createJogadorDto,
+    };
+
+    // Converter data_nascimento para DateTime se fornecida
+    if (data.data_nascimento) {
+      data.data_nascimento = new Date(data.data_nascimento).toISOString();
+    }
+
     return this.prisma.jogador.create({
-      data: createJogadorDto,
+      data,
     });
   }
 
@@ -85,9 +94,18 @@ export class JogadorService {
   }
 
   async update(id: number, updateJogadorDto: UpdateJogadorDto) {
+    const data = {
+      ...updateJogadorDto,
+    };
+
+    // Converter data_nascimento para DateTime se fornecida
+    if (data.data_nascimento) {
+      data.data_nascimento = new Date(data.data_nascimento).toISOString();
+    }
+
     return this.prisma.jogador.update({
       where: { id },
-      data: updateJogadorDto,
+      data,
     });
   }
 
