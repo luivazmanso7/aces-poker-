@@ -11,6 +11,7 @@ import {
   Card,
   CardContent,
   Chip,
+  CircularProgress,
 } from '@mui/material';
 import {
   Plus,
@@ -20,15 +21,49 @@ import {
   Database,
   Wifi,
 } from 'lucide-react';
+import { dashboardService, type DashboardStatistics } from '@/services/dashboard.service';
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
+  const [dataLoading, setDataLoading] = useState(true);
+  const [error, setError] = useState<string>('');
+  const [stats, setStats] = useState<DashboardStatistics | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
-  // Simular carregamento
+  // Carregar estatísticas
+  const loadStatistics = async () => {
+    try {
+      setError('');
+      const data = await dashboardService.getStatistics();
+      setStats(data);
+    } catch (err) {
+      console.error('Erro ao carregar estatísticas:', err);
+      setError('Erro ao carregar estatísticas do dashboard');
+    } finally {
+      setDataLoading(false);
+    }
+  };
+
+  // Atualizar estatísticas
+  const refreshStatistics = async () => {
+    setRefreshing(true);
+    await loadStatistics();
+    setRefreshing(false);
+  };
+
+  // Simular carregamento inicial + carregar dados reais
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 800);
+    const initializeDashboard = async () => {
+      // Simular carregamento da interface
+      setTimeout(() => {
+        setLoading(false);
+      }, 800);
+
+      // Carregar dados reais
+      await loadStatistics();
+    };
+
+    initializeDashboard();
   }, []);
 
   if (loading) {
@@ -228,25 +263,75 @@ export default function DashboardPage() {
               <Typography variant="h6" sx={{ color: 'white', fontWeight: 600 }}>
                 Estatísticas
               </Typography>
+              {refreshing && (
+                <CircularProgress size={16} sx={{ ml: 1, color: '#f59e0b' }} />
+              )}
             </Box>
 
             <Box>
-              <Box display="flex" justifyContent="space-between" mb={1}>
+              {dataLoading ? (
+                <Box sx={{ textAlign: 'center', py: 2 }}>
+                  <CircularProgress size={24} sx={{ color: '#f59e0b' }} />
+                  <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)', mt: 1 }}>
+                    Carregando estatísticas...
+                  </Typography>
+                </Box>
+              ) : error ? (
+                <Box sx={{ textAlign: 'center', py: 2 }}>
+                  <Typography variant="body2" sx={{ color: '#ef4444', mb: 1 }}>
+                    {error}
+                  </Typography>
+                  <Button
+                    size="small"
+                    onClick={refreshStatistics}
+                    disabled={refreshing}
+                    sx={{ color: '#f59e0b', textTransform: 'none' }}
+                  >
+                    Tentar novamente
+                  </Button>
+                </Box>
+              ) : stats ? (
+                <>
+                  <Box display="flex" justifyContent="space-between" mb={1}>
+                    <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                      Torneios Ativos
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#f59e0b', fontWeight: 600 }}>
+                      {stats.torneiosAtivos}
+                    </Typography>
+                  </Box>
+                  <Box display="flex" justifyContent="space-between" mb={1}>
+                    <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                      Jogadores Cadastrados
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#f59e0b', fontWeight: 600 }}>
+                      {dashboardService.formatNumber(stats.totalJogadores)}
+                    </Typography>
+                  </Box>
+                  {stats.temporadaAtual && (
+                    <Box display="flex" justifyContent="space-between" mb={1}>
+                      <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                        Temporada Atual
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: '#f59e0b', fontWeight: 600 }}>
+                        {stats.temporadaAtual.torneiosRealizados}/{stats.temporadaAtual.totalTorneios}
+                      </Typography>
+                    </Box>
+                  )}
+                  <Box display="flex" justifyContent="space-between">
+                    <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                      Jogadores Ativos
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#f59e0b', fontWeight: 600 }}>
+                      {dashboardService.formatNumber(stats.jogadoresAtivos)}
+                    </Typography>
+                  </Box>
+                </>
+              ) : (
                 <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                  Torneios Ativos
+                  Nenhuma estatística disponível
                 </Typography>
-                <Typography variant="body2" sx={{ color: '#f59e0b', fontWeight: 600 }}>
-                  12
-                </Typography>
-              </Box>
-              <Box display="flex" justifyContent="space-between" mb={1}>
-                <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                  Jogadores Cadastrados
-                </Typography>
-                <Typography variant="body2" sx={{ color: '#f59e0b', fontWeight: 600 }}>
-                  156
-                </Typography>
-              </Box>
+              )}
             </Box>
           </CardContent>
         </Card>
