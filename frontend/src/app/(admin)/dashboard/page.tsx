@@ -10,7 +10,6 @@ import {
   LinearProgress,
   Card,
   CardContent,
-  Chip,
   CircularProgress,
 } from '@mui/material';
 import {
@@ -18,10 +17,15 @@ import {
   Zap,
   Trophy,
   RefreshCw,
-  Database,
   Wifi,
 } from 'lucide-react';
 import { dashboardService, type DashboardStatistics } from '@/services/dashboard.service';
+import {
+  ParticipacoesPorMesChart,
+  DistribuicaoJogadoresChart,
+  RankingMedioTorneioChart,
+  EvolucaoRankingChart
+} from '@/components/dashboard/charts';
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
@@ -167,77 +171,11 @@ export default function DashboardPage() {
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+          gridTemplateColumns: { xs: '1fr', md: '1fr' },
           gap: 3,
           mb: 4,
         }}
       >
-        {/* Status do Sistema */}
-        <Card
-          className="glass-effect card-hover"
-          sx={{
-            background: 'linear-gradient(145deg, rgba(30, 30, 30, 0.9) 0%, rgba(42, 42, 42, 0.9) 100%)',
-            border: '1px solid rgba(245, 158, 11, 0.2)',
-            borderRadius: 3,
-          }}
-        >
-          <CardContent sx={{ p: 3 }}>
-            <Box display="flex" alignItems="center" mb={2}>
-              <Box
-                sx={{
-                  p: 1.5,
-                  borderRadius: 2,
-                  background: 'linear-gradient(135deg, #7c2d12 0%, #f59e0b 100%)',
-                  mr: 2,
-                }}
-              >
-                <Database size={24} color="white" />
-              </Box>
-              <Typography variant="h6" sx={{ color: 'white', fontWeight: 600 }}>
-                Status do Sistema
-              </Typography>
-            </Box>
-
-            <Box>
-              <Box display="flex" justifyContent="space-between" mb={1}>
-                <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                  Banco de Dados
-                </Typography>
-                <Chip
-                  label="Online"
-                  size="small"
-                  sx={{
-                    background: 'rgba(34, 197, 94, 0.2)',
-                    color: '#22c55e',
-                    border: '1px solid rgba(34, 197, 94, 0.3)',
-                    cursor: 'default',
-                    '&:hover': {
-                      background: 'rgba(34, 197, 94, 0.2)',
-                    },
-                  }}
-                />
-              </Box>
-              <Box display="flex" justifyContent="space-between" mb={1}>
-                <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                  API Backend
-                </Typography>
-                <Chip
-                  label="Ativo"
-                  size="small"
-                  sx={{
-                    background: 'rgba(34, 197, 94, 0.2)',
-                    color: '#22c55e',
-                    border: '1px solid rgba(34, 197, 94, 0.3)',
-                    cursor: 'default',
-                    '&:hover': {
-                      background: 'rgba(34, 197, 94, 0.2)',
-                    },
-                  }}
-                />
-              </Box>
-            </Box>
-          </CardContent>
-        </Card>
 
         {/* Estatísticas Rápidas */}
         <Card
@@ -335,6 +273,110 @@ export default function DashboardPage() {
             </Box>
           </CardContent>
         </Card>
+      </Box>
+
+      {/* Seção de Analytics - Gráficos */}
+      <Box mb={4}>
+        <Typography
+          variant="h5"
+          sx={{
+            fontWeight: 600,
+            background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            mb: 3,
+          }}
+        >
+          📊 Analytics Dashboard
+        </Typography>
+
+        {/* Grid de Gráficos */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', lg: '1fr 1fr' },
+            gap: 3,
+            mb: 3,
+          }}
+        >
+          {/* Participações por Mês */}
+          <Card
+            className="glass-effect"
+            sx={{
+              background: 'linear-gradient(145deg, rgba(30, 30, 30, 0.9) 0%, rgba(42, 42, 42, 0.9) 100%)',
+              border: '1px solid rgba(245, 158, 11, 0.2)',
+              borderRadius: 3,
+            }}
+          >
+            <CardContent sx={{ p: 3 }}>
+              <Typography variant="h6" sx={{ color: 'white', mb: 2, fontWeight: 600 }}>
+                Participações por Mês
+              </Typography>
+              <ParticipacoesPorMesChart />
+            </CardContent>
+          </Card>
+
+          {/* Distribuição de Jogadores */}
+          <Card
+            className="glass-effect"
+            sx={{
+              background: 'linear-gradient(145deg, rgba(30, 30, 30, 0.9) 0%, rgba(42, 42, 42, 0.9) 100%)',
+              border: '1px solid rgba(245, 158, 11, 0.2)',
+              borderRadius: 3,
+            }}
+          >
+            <CardContent sx={{ p: 3 }}>
+              <Typography variant="h6" sx={{ color: 'white', mb: 2, fontWeight: 600 }}>
+                Jogadores Ativos vs Inativos
+              </Typography>
+              <DistribuicaoJogadoresChart />
+            </CardContent>
+          </Card>
+        </Box>
+
+        {/* Segunda linha de gráficos */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', lg: '1fr 1fr' },
+            gap: 3,
+          }}
+        >
+          {/* Ranking Médio por Torneio */}
+          <Card
+            className="glass-effect"
+            sx={{
+              background: 'linear-gradient(145deg, rgba(30, 30, 30, 0.9) 0%, rgba(42, 42, 42, 0.9) 100%)',
+              border: '1px solid rgba(245, 158, 11, 0.2)',
+              borderRadius: 3,
+            }}
+          >
+            <CardContent sx={{ p: 3 }}>
+              <Typography variant="h6" sx={{ color: 'white', mb: 2, fontWeight: 600 }}>
+                Ranking Médio por Torneio
+              </Typography>
+              <RankingMedioTorneioChart />
+            </CardContent>
+          </Card>
+
+          {/* Evolução do Ranking */}
+          <Card
+            className="glass-effect"
+            sx={{
+              background: 'linear-gradient(145deg, rgba(30, 30, 30, 0.9) 0%, rgba(42, 42, 42, 0.9) 100%)',
+              border: '1px solid rgba(245, 158, 11, 0.2)',
+              borderRadius: 3,
+            }}
+          >
+            <CardContent sx={{ p: 3 }}>
+              <Typography variant="h6" sx={{ color: 'white', mb: 2, fontWeight: 600 }}>
+                Evolução do Ranking (Top 3)
+              </Typography>
+              <EvolucaoRankingChart />
+            </CardContent>
+          </Card>
+        </Box>
       </Box>
 
       {/* Ações Rápidas */}

@@ -90,6 +90,27 @@ export class FotoService {
     });
   }
 
+  async findByTemporada(temporadaId: number) {
+    return this.prisma.foto.findMany({
+      where: {
+        categoria: 'TEMPORADA',
+        torneio: {
+          id_temporada: temporadaId,
+        },
+      },
+      include: {
+        torneio: {
+          include: {
+            temporada: true,
+          },
+        },
+      },
+      orderBy: {
+        data: 'desc',
+      },
+    });
+  }
+
   async findGaleriaOrganizada() {
     const [temporadas, hallDaFama, melhoresMomentos] = await Promise.all([
       this.findTemporadas(),
