@@ -19,8 +19,9 @@ export class CreateFotoDto {
   @IsInt()
   id_jogador?: number;
 
-  @IsUrl()
-  imagem_url: string;
+  @IsOptional()
+  @IsString()
+  imagem_url?: string; // Tornado opcional para suportar uploads
 
   @IsOptional()
   @IsString()

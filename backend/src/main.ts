@@ -3,9 +3,11 @@ import { ValidationPipe, Logger } from '@nestjs/common';
 import { AppModule } from './app.module.js';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const logger = new Logger('Bootstrap');
   
   // Configurar CORS
@@ -13,6 +15,11 @@ async function bootstrap() {
     origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Accept, Authorization',
+  });
+
+  // Servir arquivos estáticos
+  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+    prefix: '/uploads/',
   });
 
   // Configurar filtro global de exceções
@@ -39,6 +46,7 @@ async function bootstrap() {
   
   logger.log(`🚀 Servidor rodando na porta ${port}`);
   logger.log(`📚 API disponível em: http://localhost:${port}/api`);
+  logger.log(`📁 Uploads disponíveis em: http://localhost:${port}/uploads`);
 }
 
 bootstrap();

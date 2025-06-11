@@ -30,6 +30,7 @@ import {
   People as UsersIcon,
   Leaderboard as RankingIcon,
   PhotoLibrary as GalleryIcon,
+  AddPhotoAlternate as PhotoManageIcon,
   Settings as SettingsIcon,
   ExitToApp as LogoutIcon,
   Menu as MenuIcon,
@@ -47,6 +48,7 @@ const navigation = [
   { name: 'Jogadores', href: '/jogadores', icon: UsersIcon },
   { name: 'Rankings', href: '/rankings', icon: RankingIcon },
   { name: 'Galeria', href: '/galeria', icon: GalleryIcon },
+  { name: 'Fotos', href: '/fotos', icon: PhotoManageIcon },
   { name: 'Administração', href: '/admin', icon: SettingsIcon },
 ]
 

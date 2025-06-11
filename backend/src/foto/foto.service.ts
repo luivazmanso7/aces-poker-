@@ -49,21 +49,45 @@ export class FotoService {
   }
 
   async findHallDaFama() {
-    return this.prisma.$queryRaw`
-      SELECT * FROM fotos WHERE categoria = 'HALL_DA_FAMA' ORDER BY data DESC
-    `;
+    return this.prisma.foto.findMany({
+      where: {
+        categoria: 'HALL_DA_FAMA',
+      },
+      include: {
+        torneio: true,
+      },
+      orderBy: {
+        data: 'desc',
+      },
+    });
   }
 
   async findMelhoresMomentos() {
-    return this.prisma.$queryRaw`
-      SELECT * FROM fotos WHERE categoria = 'MELHORES_MOMENTOS' ORDER BY data DESC
-    `;
+    return this.prisma.foto.findMany({
+      where: {
+        categoria: 'MELHORES_MOMENTOS',
+      },
+      include: {
+        torneio: true,
+      },
+      orderBy: {
+        data: 'desc',
+      },
+    });
   }
 
   async findTemporadas() {
-    return this.prisma.$queryRaw`
-      SELECT * FROM fotos WHERE categoria = 'TEMPORADA' ORDER BY data DESC
-    `;
+    return this.prisma.foto.findMany({
+      where: {
+        categoria: 'TEMPORADA',
+      },
+      include: {
+        torneio: true,
+      },
+      orderBy: {
+        data: 'desc',
+      },
+    });
   }
 
   async findGaleriaOrganizada() {
