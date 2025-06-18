@@ -18,7 +18,6 @@ import {
   Avatar,
   Menu,
   MenuItem,
-  Chip,
   Divider,
   useTheme,
   useMediaQuery,
@@ -29,8 +28,6 @@ import {
   SportsEsports as TournamentIcon,
   People as UsersIcon,
   Leaderboard as RankingIcon,
-  PhotoLibrary as GalleryIcon,
-  AddPhotoAlternate as PhotoManageIcon,
   Settings as SettingsIcon,
   ExitToApp as LogoutIcon,
   Menu as MenuIcon,
@@ -47,8 +44,8 @@ const navigation = [
   { name: 'Torneios', href: '/torneios', icon: TournamentIcon },
   { name: 'Jogadores', href: '/jogadores', icon: UsersIcon },
   { name: 'Rankings', href: '/rankings', icon: RankingIcon },
-  { name: 'Galeria', href: '/galeria', icon: GalleryIcon },
-  { name: 'Fotos', href: '/fotos', icon: PhotoManageIcon },
+  { name: 'Galeria', href: '/galeria', icon: TrophyIcon },
+  { name: 'Fotos', href: '/fotos', icon: TrophyIcon },
   { name: 'Administração', href: '/admin', icon: SettingsIcon },
 ]
 
@@ -94,7 +91,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const isMenuOpen = Boolean(anchorEl)
 
   const drawer = (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ 
+      height: '100%', 
+      display: 'flex', 
+      flexDirection: 'column',
+      backgroundColor: '#000000',
+      color: '#ffffff',
+    }}>
       {/* Logo */}
       <Box
         sx={{
@@ -102,15 +105,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           display: 'flex',
           alignItems: 'center',
           gap: 2,
-          borderBottom: 1,
-          borderColor: 'divider',
-          backgroundColor: 'background.paper',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
         }}
       >
         <Box
           sx={{
-            fontSize: '2rem',
-            filter: 'grayscale(0.2)',
+            fontSize: '1.5rem',
           }}
         >
           🃏
@@ -120,34 +120,37 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             variant="h6"
             sx={{
               fontWeight: 700,
-              color: 'text.primary',
+              color: '#ffffff',
+              fontSize: '1.1rem',
+              letterSpacing: '0.5px',
             }}
           >
             ACES POKER
           </Typography>
-          <Chip
-            label="ADMIN"
-            size="small"
+          <Typography
+            variant="caption"
             sx={{
-              backgroundColor: 'rgba(0,0,0,0.08)',
-              color: 'text.secondary',
+              color: 'rgba(255, 255, 255, 0.6)',
+              fontSize: '0.65rem',
               fontWeight: 500,
-              fontSize: '0.7rem',
-              height: 20,
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
             }}
-          />
+          >
+            Admin Panel
+          </Typography>
         </Box>
       </Box>
 
       {/* Navigation */}
-      <Box sx={{ flex: 1, overflow: 'auto', py: 2 }}>
-        <List>
+      <Box sx={{ flex: 1, overflow: 'auto', py: 3 }}>
+        <List sx={{ px: 2 }}>
           {navigation.map((item) => {
             const Icon = item.icon
             const isActive = pathname === item.href
             
             return (
-              <ListItem key={item.name} disablePadding sx={{ px: 2, mb: 0.5 }}>
+              <ListItem key={item.name} disablePadding sx={{ mb: 1 }}>
                 <ListItemButton
                   onClick={() => {
                     router.push(item.href)
@@ -155,37 +158,37 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                       setMobileOpen(false)
                     }
                   }}
-                  selected={isActive}
                   sx={{
-                    borderRadius: 2,
-                    minHeight: 48,
-                    '&.Mui-selected': {
-                      backgroundColor: 'rgba(0, 0, 0, 0.04)',
-                      borderLeft: '3px solid',
-                      borderLeftColor: 'text.primary',
-                      '&:hover': {
-                        backgroundColor: 'rgba(0, 0, 0, 0.08)',
-                      },
-                    },
+                    borderRadius: '8px',
+                    minHeight: 44,
+                    px: 2,
+                    py: 1.5,
+                    backgroundColor: isActive ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
                     '&:hover': {
-                      backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                      backgroundColor: isActive ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.05)',
                     },
+                    transition: 'all 0.2s ease-in-out',
                   }}
                 >
-                  <ListItemIcon
-                    sx={{
-                      color: isActive ? 'text.primary' : 'text.secondary',
-                      minWidth: 40,
-                    }}
-                  >
-                    <Icon />
-                  </ListItemIcon>
+                  {Icon && (
+                    <ListItemIcon
+                      sx={{
+                        color: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
+                        minWidth: 36,
+                        transition: 'color 0.2s ease-in-out',
+                      }}
+                    >
+                      <Icon fontSize="small" />
+                    </ListItemIcon>
+                  )}
                   <ListItemText
                     primary={item.name}
                     sx={{
                       '& .MuiListItemText-primary': {
                         fontWeight: isActive ? 600 : 400,
-                        color: isActive ? 'text.primary' : 'text.primary',
+                        color: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.8)',
+                        fontSize: '0.9rem',
+                        transition: 'color 0.2s ease-in-out',
                       },
                     }}
                   />
@@ -200,9 +203,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       <Box
         sx={{
           p: 2,
-          borderTop: 1,
-          borderColor: 'divider',
-          backgroundColor: 'background.default',
+          borderTop: '1px solid rgba(255, 255, 255, 0.1)',
         }}
       >
         <Box
@@ -210,20 +211,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             display: 'flex',
             alignItems: 'center',
             gap: 2,
-            p: 1,
-            borderRadius: 2,
-            backgroundColor: 'background.paper',
-            border: 1,
-            borderColor: 'divider',
+            p: 2,
+            borderRadius: '8px',
+            backgroundColor: 'rgba(255, 255, 255, 0.05)',
           }}
         >
           <Avatar
             sx={{
-              width: 36,
-              height: 36,
-              backgroundColor: 'action.selected',
-              color: 'text.primary',
-              fontSize: '0.9rem',
+              width: 32,
+              height: 32,
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              color: '#ffffff',
+              fontSize: '0.85rem',
               fontWeight: 600,
             }}
           >
@@ -234,10 +233,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               variant="body2"
               sx={{
                 fontWeight: 600,
-                color: 'text.primary',
+                color: '#ffffff',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
+                fontSize: '0.85rem',
               }}
             >
               {user.nome}
@@ -245,11 +245,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <Typography
               variant="caption"
               sx={{
-                color: 'text.secondary',
-                fontSize: '0.75rem',
+                color: 'rgba(255, 255, 255, 0.6)',
+                fontSize: '0.7rem',
               }}
             >
-              Administrador
+              Admin
             </Typography>
           </Box>
         </Box>
@@ -370,6 +370,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               width: DRAWER_WIDTH,
               border: 'none',
               backgroundImage: 'none',
+              backgroundColor: '#000000',
             },
           }}
         >
@@ -383,9 +384,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               boxSizing: 'border-box',
               width: DRAWER_WIDTH,
               border: 'none',
-              borderRight: 1,
-              borderColor: 'divider',
+              borderRight: '1px solid rgba(255, 255, 255, 0.1)',
               backgroundImage: 'none',
+              backgroundColor: '#000000',
             },
           }}
           open
